@@ -86,3 +86,100 @@ index b126dc6..00e37d9 100644
      {
          $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap;
      }
+
+diff --git a/Mail/Template/SenderResolver.php b/Mail/Template/SenderResolver.php
+new file mode 100644
+index 0000000..e8e328e
+--- /dev/null
++++ b/Mail/Template/SenderResolver.php
+@@ -0,0 +1,53 @@
++<?php
++/**
++ * Copyright © Magento, Inc. All rights reserved.
++ * See COPYING.txt for license details.
++ */
++namespace Magento\Framework\Mail\Template;
++
++class SenderResolver implements \Magento\Framework\Mail\Template\SenderResolverInterface
++{
++    /**
++     * Core store config
++     *
++     * @var \Magento\Framework\App\Config\ScopeConfigInterface
++     */
++    protected $_scopeConfig;
++
++    /**
++     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
++     */
++    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
++    {
++        $this->_scopeConfig = $scopeConfig;
++    }
++
++    /**
++     * {@inheritdoc}
++     */
++    public function resolve($sender, $scopeId = null)
++    {
++        $result = [];
++
++        if (!is_array($sender)) {
++            $result['name'] = $this->_scopeConfig->getValue(
++                'trans_email/ident_' . $sender . '/name',
++                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
++                $scopeId
++            );
++            $result['email'] = $this->_scopeConfig->getValue(
++                'trans_email/ident_' . $sender . '/email',
++                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
++                $scopeId
++            );
++        } else {
++            $result = $sender;
++        }
++
++        if (!isset($result['name']) || !isset($result['email'])) {
++            throw new \Magento\Framework\Exception\MailException(__('Invalid sender data'));
++        }
++
++        return $result;
++    }
++}
+diff --git a/Mail/Template/TransportBuilder.php b/Mail/Template/TransportBuilder.php
+index d7abb84..4a367e3 100644
+--- a/Mail/Template/TransportBuilder.php
++++ b/Mail/Template/TransportBuilder.php
+@@ -10,7 +10,7 @@ namespace Magento\Framework\Mail\Template;
+
+ use Magento\Framework\App\TemplateTypesInterface;
+ use Magento\Framework\Exception\LocalizedException;
+-use Magento\Framework\Mail\MessageInterface;
++use Magento\Framework\Mail\Message;
+ use Magento\Framework\Mail\MessageInterfaceFactory;
+ use Magento\Framework\Mail\TransportInterfaceFactory;
+ use Magento\Framework\ObjectManagerInterface;
+@@ -109,19 +109,18 @@ class TransportBuilder
+      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+      */
+     public function __construct(
+-        FactoryInterface $templateFactory,
+-        MessageInterface $message,
+-        SenderResolverInterface $senderResolver,
++        Factory $templateFactory,
++        Message $message,
++        SenderResolver $senderResolver,
+         ObjectManagerInterface $objectManager,
+-        TransportInterfaceFactory $mailTransportFactory,
+-        MessageInterfaceFactory $messageFactory = null
++        TransportInterfaceFactory $mailTransportFactory
+     ) {
+         $this->templateFactory = $templateFactory;
+         $this->objectManager = $objectManager;
+         $this->_senderResolver = $senderResolver;
+         $this->mailTransportFactory = $mailTransportFactory;
+-        $this->messageFactory = $messageFactory ?: $this->objectManager->get(MessageInterfaceFactory::class);
+-        $this->message = $this->messageFactory->create();
++        $this->messageFactory = $message;
++        $this->message = $message;
+     }
