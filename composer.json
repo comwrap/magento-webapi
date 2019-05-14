@@ -11,6 +11,7 @@
         "sort-packages": true
     },
     "require": {
+        "cweagans/composer-patches": "^1.6",
         "magento/product-community-edition": "2.3.1"
     },
     "require-dev": {
@@ -42,7 +43,6 @@
         "magento/module-mysql-mq": "*",
         "magento/module-new-relic-reporting": "*",
         "magento/module-version": "*",
-
         "magento/module-analytics": "*",
         "magento/module-catalog-analytics": "*",
         "magento/module-customer-analytics": "*",
@@ -50,7 +50,6 @@
         "magento/module-review-analytics": "*",
         "magento/module-sales-analytics": "*",
         "magento/module-wishlist-analytics": "*",
-
         "magento/module-bundle-graph-ql": "*",
         "magento/module-catalog-graph-ql": "*",
         "magento/module-catalog-inventory-graph-ql": "*",
@@ -70,7 +69,6 @@
         "magento/module-tax-graph-ql": "*",
         "magento/module-url-rewrite-graph-ql": "*",
         "magento/module-weee-graph-ql": "*",
-
         "magento/module-advanced-pricing-import-export": "*",
         "magento/module-bundle-import-export": "*",
         "magento/module-configurable-import-export": "*",
@@ -78,7 +76,6 @@
         "magento/module-downloadable-import-export": "*",
         "magento/module-grouped-import-export": "*",
         "magento/module-tax-import-export": "*",
-
         "magento/module-inventory": "*",
         "magento/module-inventory-admin-ui": "*",
         "magento/module-inventory-api": "*",
@@ -94,7 +91,6 @@
         "magento/module-inventory-configurable-product-indexer": "*",
         "magento/module-inventory-configuration": "*",
         "magento/module-inventory-configuration-api": "*",
-
         "magento/module-inventory-elasticsearch": "*",
         "magento/module-inventory-grouped-product": "*",
         "magento/module-inventory-grouped-product-admin-ui": "*",
@@ -129,11 +125,6 @@
         "amzn/amazon-pay-module": "*",
         "vertex/module-tax": "*",
         "vertex/sdk": "*",
-
-
-
-
-
         "magento/theme-frontend-blank":"*",
         "magento/theme-frontend-luma":"*",
         "magento/theme-adminhtml-backend": "*",
@@ -227,7 +218,6 @@
         "magento-webapi-security": "*",
         "magento/module-encryption-key":"*",
         "magento/module-indexer":"*"
-
     },
     "conflict": {
         "gene/bluefoot": "*"
@@ -275,17 +265,8 @@
         "magento-force": "override",
         "composer-exit-on-patch-failure": true,
         "patches": {
-            "magento/module-webapi": {
+            "magento/framework": {
                 "WebApi Service": "patches/composer/framework-webapi.diff"
-            },
-            "magento/module-customer": {
-                "WebApi Service": "patches/composer/module-customer.diff"
-            },
-            "magento/module-eav": {
-                "WebApi Service": "patches/composer/module-eav.diff"
-            },
-            "magento/module-indexer": {
-                "WebApi Service": "patches/composer/module-indexer.diff"
             },
             "magento/module-integration": {
                 "WebApi Service": "patches/composer/module-integration.diff"

@@ -52,6 +52,7 @@ class CommandList
             \Magento\Setup\Console\Command\DependenciesShowModulesCircularCommand::class,
             \Magento\Setup\Console\Command\DependenciesShowModulesCommand::class,
             \Magento\Setup\Console\Command\DiCompileCommand::class,
+            \Magento\Setup\Console\Command\GenerateFixturesCommand::class,
             \Magento\Setup\Console\Command\I18nCollectPhrasesCommand::class,
             \Magento\Setup\Console\Command\I18nPackCommand::class,
             \Magento\Setup\Console\Command\InfoAdminUriCommand::class,

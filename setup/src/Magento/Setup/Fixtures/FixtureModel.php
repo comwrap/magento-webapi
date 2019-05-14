@@ -9,7 +9,7 @@
  */
 namespace Magento\Setup\Fixtures;
 
-use Magento\Indexer\Console\Command\IndexerReindexCommand;
+//use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Setup\Exception;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -79,10 +79,10 @@ class FixtureModel
      * @param IndexerReindexCommand $reindexCommand
      * @param array $initArguments
      */
-    public function __construct(IndexerReindexCommand $reindexCommand, $initArguments = [])
+    public function __construct($initArguments = [])
     {
         $this->initArguments = $initArguments;
-        $this->reindexCommand = $reindexCommand;
+//        $this->reindexCommand = $reindexCommand;
     }
 
     /**
