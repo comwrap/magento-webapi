@@ -1,0 +1,26 @@
+diff --git a/Console/Command/IndexerSetDimensionsModeCommand.php b/Console/Command/IndexerSetDimensionsModeCommand.php
+index 51d67e2..e2f08c3 100644
+--- a/Console/Command/IndexerSetDimensionsModeCommand.php
++++ b/Console/Command/IndexerSetDimensionsModeCommand.php
+@@ -50,7 +50,7 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
+     public function __construct(
+         ObjectManagerFactory $objectManagerFactory,
+         ScopeConfigInterface $configReader,
+-        array $dimensionSwitchers
++        array $dimensionSwitchers = []
+     ) {
+         $this->configReader = $configReader;
+         $this->dimensionProviders = $dimensionSwitchers;
+diff --git a/Console/Command/IndexerShowDimensionsModeCommand.php b/Console/Command/IndexerShowDimensionsModeCommand.php
+index 44fff0b..0e1c27c 100644
+--- a/Console/Command/IndexerShowDimensionsModeCommand.php
++++ b/Console/Command/IndexerShowDimensionsModeCommand.php
+@@ -45,7 +45,7 @@ class IndexerShowDimensionsModeCommand extends AbstractIndexerCommand
+     public function __construct(
+         ObjectManagerFactory $objectManagerFactory,
+         ScopeConfigInterface $configReader,
+-        array $indexers
++        array $indexers = []
+     ) {
+         $this->configReader = $configReader;
+         $this->indexers = $indexers;         

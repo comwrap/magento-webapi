@@ -1,0 +1,57 @@
+diff --git a/Model/Attribute.php b/Model/Attribute.php
+index 98a9787..69ab32f 100644
+--- a/Model/Attribute.php
++++ b/Model/Attribute.php
+@@ -5,7 +5,6 @@
+  */
+ namespace Magento\Customer\Model;
+
+-use Magento\Catalog\Api\Data\EavAttributeInterface;
+ use Magento\Framework\Api\AttributeValueFactory;
+ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
+@@ -62,7 +61,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
+      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+-     * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
+      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+      * @param DateTimeFormatterInterface $dateTimeFormatter
+      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+@@ -86,7 +84,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
+         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+-        \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
+         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+         DateTimeFormatterInterface $dateTimeFormatter,
+         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
+@@ -112,7 +109,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
+             $dataObjectProcessor,
+             $dataObjectHelper,
+             $localeDate,
+-            $reservedAttributeList,
+             $localeResolver,
+             $dateTimeFormatter,
+             $resource,
+@@ -136,11 +132,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
+      */
+     public function afterSave()
+     {
+-        if ($this->isObjectNew() && (bool)$this->getData(EavAttributeInterface::IS_USED_IN_GRID)) {
+-            $this->_getResource()->addCommitCallback([$this, 'invalidate']);
+-        } elseif (!$this->isObjectNew() && $this->dataHasChangedFor(EavAttributeInterface::IS_USED_IN_GRID)) {
+-            $this->_getResource()->addCommitCallback([$this, 'invalidate']);
+-        }
+         $this->attributeMetadataCache->clean();
+         return parent::afterSave();
+     }
+@@ -161,9 +152,6 @@ class Attribute extends \Magento\Eav\Model\Attribute
+      */
+     public function afterDeleteCommit()
+     {
+-        if ($this->getData(EavAttributeInterface::IS_USED_IN_GRID) == true) {
+-            $this->invalidate();
+-        }
+         return parent::afterDeleteCommit();
+     }

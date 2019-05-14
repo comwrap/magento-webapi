@@ -1,0 +1,52 @@
+diff --git a/Setup/Patch/Data/RemoveInactiveTokens.php b/Setup/Patch/Data/RemoveInactiveTokens.php
+index c6d8d58..f13d687 100644
+--- a/Setup/Patch/Data/RemoveInactiveTokens.php
++++ b/Setup/Patch/Data/RemoveInactiveTokens.php
+@@ -113,20 +113,6 @@ class RemoveInactiveTokens implements DataPatchInterface, PatchVersionInterface
+      */
+     private function removeTokensFromInactiveCustomers()
+     {
+-        $oauthTokenTable = $this->moduleDataSetup->getTable('oauth_token');
+-        $adminUserTable = $this->moduleDataSetup->getTable('customer_entity');
+-
+-        $select = $this->moduleDataSetup->getConnection()->select()->from(
+-            $adminUserTable,
+-            ['entity_id', 'is_active']
+-        );
+-
+-        $admins = $this->moduleDataSetup->getConnection()->fetchAll($select);
+-        foreach ($admins as $admin) {
+-            if ($admin['is_active'] == 0) {
+-                $where = ['customer_id = ?' => (int)$admin['entity_id']];
+-                $this->moduleDataSetup->getConnection()->delete($oauthTokenTable, $where);
+-            }
+-        }
++
+     }
+ }
+diff --git a/etc/db_schema.xml b/etc/db_schema.xml
+index f1824fa..5a437d1 100644
+--- a/etc/db_schema.xml
++++ b/etc/db_schema.xml
+@@ -65,9 +65,6 @@
+         <constraint xsi:type="foreign" referenceId="OAUTH_TOKEN_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID" table="oauth_token"
+                     column="consumer_id" referenceTable="oauth_consumer" referenceColumn="entity_id"
+                     onDelete="CASCADE"/>
+-        <constraint xsi:type="foreign" referenceId="OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID" table="oauth_token"
+-                    column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id"
+-                    onDelete="CASCADE"/>
+         <constraint xsi:type="unique" referenceId="OAUTH_TOKEN_TOKEN">
+             <column name="token"/>
+         </constraint>
+diff --git a/etc/db_schema_whitelist.json b/etc/db_schema_whitelist.json
+index a7649ee..58d03f6 100644
+--- a/etc/db_schema_whitelist.json
++++ b/etc/db_schema_whitelist.json
+@@ -43,7 +43,6 @@
+             "PRIMARY": true,
+             "OAUTH_TOKEN_ADMIN_ID_ADMIN_USER_USER_ID": true,
+             "OAUTH_TOKEN_CONSUMER_ID_OAUTH_CONSUMER_ENTITY_ID": true,
+-            "OAUTH_TOKEN_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+             "OAUTH_TOKEN_TOKEN": true
+         }
+     },

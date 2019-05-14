@@ -1,0 +1,119 @@
+diff --git a/Block/Html/Header/Logo.php b/Block/Html/Header/Logo.php
+index 37a81ca..24d3e1a 100644
+--- a/Block/Html/Header/Logo.php
++++ b/Block/Html/Header/Logo.php
+@@ -24,7 +24,7 @@ class Logo extends \Magento\Framework\View\Element\Template
+     /**
+      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+      */
+-    protected $_fileStorageHelper;
++//    protected $_fileStorageHelper;
+
+     /**
+      * @param \Magento\Framework\View\Element\Template\Context $context
+@@ -33,10 +33,10 @@ class Logo extends \Magento\Framework\View\Element\Template
+      */
+     public function __construct(
+         \Magento\Framework\View\Element\Template\Context $context,
+-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper,
++//        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper,
+         array $data = []
+     ) {
+-        $this->_fileStorageHelper = $fileStorageHelper;
++//        $this->_fileStorageHelper = $fileStorageHelper;
+         parent::__construct($context, $data);
+     }
+
+@@ -151,9 +151,9 @@ class Logo extends \Magento\Framework\View\Element\Template
+      */
+     protected function _isFile($filename)
+     {
+-        if ($this->_fileStorageHelper->checkDbUsage() && !$this->getMediaDirectory()->isFile($filename)) {
+-            $this->_fileStorageHelper->saveFileToFilesystem($filename);
+-        }
++//        if ($this->_fileStorageHelper->checkDbUsage() && !$this->getMediaDirectory()->isFile($filename)) {
++//            $this->_fileStorageHelper->saveFileToFilesystem($filename);
++//        }
+
+         return $this->getMediaDirectory()->isFile($filename);
+     }
+
+diff --git a/Model/Favicon/Favicon.php b/Model/Favicon/Favicon.php
+index e1b9703..37fc30a 100644
+--- a/Model/Favicon/Favicon.php
++++ b/Model/Favicon/Favicon.php
+@@ -30,7 +30,7 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
+     /**
+      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+      */
+-    protected $fileStorageDatabase;
++//    protected $fileStorageDatabase;
+
+     /**
+      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+@@ -46,12 +46,12 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
+     public function __construct(
+         \Magento\Store\Model\StoreManagerInterface $storeManager,
+         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+-        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase,
++//        \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDatabase,
+         \Magento\Framework\Filesystem $filesystem
+     ) {
+         $this->storeManager = $storeManager;
+         $this->scopeConfig = $scopeConfig;
+-        $this->fileStorageDatabase = $fileStorageDatabase;
++//        $this->fileStorageDatabase = $fileStorageDatabase;
+         $this->mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+     }
+
+@@ -103,9 +103,9 @@ class Favicon implements \Magento\Framework\View\Page\FaviconInterface
+      */
+     protected function checkIsFile($filename)
+     {
+-        if ($this->fileStorageDatabase->checkDbUsage() && !$this->mediaDirectory->isFile($filename)) {
+-            $this->fileStorageDatabase->saveFileToFilesystem($filename);
+-        }
++//        if ($this->fileStorageDatabase->checkDbUsage() && !$this->mediaDirectory->isFile($filename)) {
++//            $this->fileStorageDatabase->saveFileToFilesystem($filename);
++//        }
+         return $this->mediaDirectory->isFile($filename);
+     }
+ }
+
+diff --git a/Setup/RecurringData.php b/Setup/RecurringData.php
+index 972b60d..74f25fe 100644
+--- a/Setup/RecurringData.php
++++ b/Setup/RecurringData.php
+@@ -6,7 +6,7 @@
+
+ namespace Magento\Theme\Setup;
+
+-use Magento\Framework\Indexer\IndexerRegistry;
++//use Magento\Framework\Indexer\IndexerRegistry;
+ use Magento\Framework\Setup\InstallDataInterface;
+ use Magento\Framework\Setup\ModuleContextInterface;
+ use Magento\Framework\Setup\ModuleDataSetupInterface;
+@@ -36,10 +36,10 @@ class RecurringData implements InstallDataInterface
+      * @param Registration $themeRegistration
+      * @param IndexerRegistry $indexerRegistry
+      */
+-    public function __construct(Registration $themeRegistration, IndexerRegistry $indexerRegistry)
++    public function __construct(Registration $themeRegistration)
+     {
+         $this->themeRegistration = $themeRegistration;
+-        $this->indexerRegistry = $indexerRegistry;
++//        $this->indexerRegistry = $indexerRegistry;
+     }
+
+     /**
+@@ -47,8 +47,8 @@ class RecurringData implements InstallDataInterface
+      */
+     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+     {
+-        $indexer = $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID);
+-        $indexer->reindexAll();
++//        $indexer = $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID);
++//        $indexer->reindexAll();
+         $this->themeRegistration->register();
+     }
+ }

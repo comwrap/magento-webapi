@@ -1,0 +1,88 @@
+diff --git a/WebApi/CustomAttributeTypeLocator.php b/WebApi/CustomAttributeTypeLocator.php
+new file mode 100644
+index 0000000..14e3fc7
+--- /dev/null
++++ b/WebApi/CustomAttributeTypeLocator.php
+@@ -0,0 +1,56 @@
++<?php
++/**
++ * Copyright © Magento, Inc. All rights reserved.
++ * See COPYING.txt for license details.
++ */
++namespace Magento\Framework\Webapi;
++
++use Magento\Framework\Reflection\TypeProcessor;
++//use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
++use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
++/**
++ * Class to locate types for Eav custom attributes
++ */
++class CustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterface
++{
++    /**
++     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface[]
++     */
++    private $typeLocators;
++    /**
++     * @var ServiceTypeListInterface
++     */
++//    private $serviceTypeList;
++    /**
++     * Initialize TypeLocator
++     *
++     * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface[] $typeLocators
++     */
++    public function __construct(
++//        ServiceTypeListInterface $serviceTypeList,
++        array $typeLocators = []
++    ) {
++        $this->typeLocators = $typeLocators;
++//        $this->serviceTypeList = $serviceTypeList;
++    }
++    /**
++     * {@inheritdoc}
++     */
++    public function getType($attributeCode, $entityType)
++    {
++        foreach ($this->typeLocators as $typeLocator) {
++            $type = $typeLocator->getType($attributeCode, $entityType);
++            if ($type !== TypeProcessor::NORMALIZED_ANY_TYPE) {
++                return $type;
++            }
++        }
++        return TypeProcessor::NORMALIZED_ANY_TYPE;
++    }
++    /**
++     * {@inheritDoc}
++     */
++    public function getAllServiceDataInterfaces()
++    {
++        return $this->serviceTypeList->getDataTypes();
++    }
++}
+\ No newline at end of file
+diff --git a/WebApi/CustomAttributeTypeLocatorInterface.php b/WebApi/CustomAttributeTypeLocatorInterface.php
+index ac183bc..e208c5b 100644
+--- a/WebApi/CustomAttributeTypeLocatorInterface.php
++++ b/WebApi/CustomAttributeTypeLocatorInterface.php
+@@ -25,7 +25,6 @@ interface CustomAttributeTypeLocatorInterface
+      *
+      * @return string[] array of Data Interface class names
+      * @deprecated 102.0.0
+-     * @see \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface::getDataTypes()
+      */
+     public function getAllServiceDataInterfaces();
+ }
+diff --git a/WebApi/ServiceTypeToEntityTypeMap.php b/WebApi/ServiceTypeToEntityTypeMap.php
+index b126dc6..00e37d9 100644
+--- a/WebApi/ServiceTypeToEntityTypeMap.php
++++ b/WebApi/ServiceTypeToEntityTypeMap.php
+@@ -19,7 +19,7 @@ class ServiceTypeToEntityTypeMap
+     /**
+      * @param $serviceTypeToEntityTypeMap
+      */
+-    public function __construct($serviceTypeToEntityTypeMap)
++    public function __construct($serviceTypeToEntityTypeMap = [])
+     {
+         $this->serviceTypeToEntityTypeMap = $serviceTypeToEntityTypeMap;
+     }

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\ImportService\Api\SourceUploadInterface"
+                type="Magento\ImportService\Model\SourceUpload" />
+    <preference for="Magento\ImportService\Api\Data\SourceInterface"
+                type="Magento\ImportService\Model\Source" />
+    <preference for="Magento\ImportService\Api\Data\SourceFormatInterface"
+                type="Magento\ImportService\Model\SourceFormat" />
+    <preference for="Magento\ImportService\Api\Data\SourceFormatMappingInterface"
+                type="Magento\ImportService\Model\SourceFormatMapping" />
+    <preference for="Magento\ImportService\Api\Data\SourceFormatMappingValueInterface"
+                type="Magento\ImportService\Model\SourceFormatMappingValue" />
+    <preference for="Magento\ImportService\Api\Data\SourceUploadResponseInterface"
+                type="Magento\ImportService\Model\SourceUploadResponse" />
+    <preference for="Magento\ImportService\Api\SourceRepositoryInterface"
+                type="Magento\ImportService\Model\SourceRepository"/>
+    <preference for="Magento\ImportService\Model\Source\Command\GetListInterface" type="Magento\ImportService\Model\Source\Command\GetList"/>
+    <preference for="Magento\ImportService\Model\Source\Command\DeleteByUuidInterface" type="Magento\ImportService\Model\Source\Command\DeleteByUuid"/>
+    <virtualType name="Magento\ImportService\Model\Import\Type\Csv" type="Magento\ImportService\Model\Import\Type\FileSourceType">
+        <arguments>
+            <argument name="sourceType" xsi:type="string">csv</argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="plain" xsi:type="string">text/plain</item>
+                <item name="csv" xsi:type="string">text/csv</item>
+                <item name="octet-stream" xsi:type="string">application/octet-stream</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ImportService\Model\Import\SourceTypePool">
+        <arguments>
+            <argument name="sourceTypes" xsi:type="array">
+                <item name="csv" xsi:type="object">Magento\ImportService\Model\Import\Type\Csv</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\ImportService\Model\Source\Validator\LocalPathFileProcessorValidator" type="Magento\ImportService\Model\Source\Validator\ImportServiceValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="source_request_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\SourceRequestValidator</item>
+                <item name="local_path_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\LocalPathValidator</item>
+                <item name="mime_type_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\MimeTypeValidator</item>
+                <item name="uuid_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\UuidValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ImportService\Model\Import\Processor\LocalPathFileProcessor">
+        <arguments>
+            <argument name="validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\LocalPathFileProcessorValidator</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\ImportService\Model\Source\Validator\Base64EncodedDataProcessorValidator" type="Magento\ImportService\Model\Source\Validator\ImportServiceValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="source_request_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\SourceRequestValidator</item>
+                <item name="base64_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\Base64Validator</item>
+                <item name="uuid_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\UuidValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ImportService\Model\Import\Processor\Base64EncodedDataProcessor">
+        <arguments>
+            <argument name="validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\Base64EncodedDataProcessorValidator</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\ImportService\Model\Source\Validator\ExternalFileProcessorValidator" type="Magento\ImportService\Model\Source\Validator\ImportServiceValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="source_request_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\SourceRequestValidator</item>
+                <item name="remote_url_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\RemoteUrlValidator</item>
+                <item name="mime_type_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\MimeTypeValidator</item>
+                <item name="uuid_validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\UuidValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ImportService\Model\Import\Processor\ExternalFileProcessor">
+        <arguments>
+            <argument name="validator" xsi:type="object">Magento\ImportService\Model\Source\Validator\ExternalFileProcessorValidator</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportService\Model\Import\SourceProcessorPool">
+        <arguments>
+            <argument name="sourceProcessors" xsi:type="array">
+                <item name="local_path" xsi:type="array">
+                    <item name="processor" xsi:type="object">Magento\ImportService\Model\Import\Processor\LocalPathFileProcessor\Proxy</item>
+                    <item name="import_type" xsi:type="const">Magento\ImportService\Model\Import\Processor\LocalPathFileProcessor::IMPORT_TYPE</item>
+                </item>
+                <item name="base64_encoded_data" xsi:type="array">
+                    <item name="processor" xsi:type="object">Magento\ImportService\Model\Import\Processor\Base64EncodedDataProcessor\Proxy</item>
+                    <item name="import_type" xsi:type="const">Magento\ImportService\Model\Import\Processor\Base64EncodedDataProcessor::IMPORT_TYPE</item>
+                </item>
+                <item name="external" xsi:type="array">
+                    <item name="processor" xsi:type="object">Magento\ImportService\Model\Import\Processor\ExternalFileProcessor\Proxy</item>
+                    <item name="import_type" xsi:type="const">Magento\ImportService\Model\Import\Processor\ExternalFileProcessor::IMPORT_TYPE</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\ImportService\Api\ImportStatusInterface" type="Magento\ImportService\Model\ImportStatus" />
+    <preference for="Magento\ImportService\Api\Data\ImportStatusResponseInterface" type="Magento\ImportService\Model\ImportStatusResponse" />
+    <preference for="Magento\ImportService\Api\Data\ImportStatusResponseItemInterface" type="Magento\ImportService\Model\ImportStatusResponseItem" />
+    <preference for="Magento\ImportService\Api\ImportStartInterface"
+                type="Magento\ImportService\Model\ImportStart" />
+    <preference for="Magento\ImportService\Api\Data\ImportStartResponseInterface"
+                type="Magento\ImportService\Model\ImportStartResponse" />
+    <preference for="Magento\ImportService\Api\Data\ImportConfigInterface"
+                type="Magento\ImportService\Model\ImportConfig" />
+    <preference for="Magento\ImportService\Api\ImportRestartOperationInterface"
+                type="Magento\ImportService\Model\ImportRestartOperation"/>
+</config>

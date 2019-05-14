@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="import_service_source" resource="default" engine="innodb" comment="ImportService Sources List">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Entity Id"/>
+        <column xsi:type="varbinary" name="uuid" nullable="false" length="39"
+                comment="Universally unique identifier"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="255"
+                comment="Import Status"/>
+        <column xsi:type="varchar" name="source_type" length="255"
+                comment="Type of imported sources"/>
+        <column xsi:type="varchar" name="import_type" length="255"
+                comment="Type of the import"/>
+        <column xsi:type="varchar" name="import_data" length="255"
+                comment="Import data"/>
+        <column xsi:type="longtext" name="format" comment="Source Format" />
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="SOURCE_UUID">
+            <column name="uuid"/>
+        </constraint>
+    </table>
+</schema>

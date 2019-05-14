@@ -1,0 +1,73 @@
+diff --git a/Model/Entity/Attribute.php b/Model/Entity/Attribute.php
+index 06a4abb..bcad8ac 100644
+--- a/Model/Entity/Attribute.php
++++ b/Model/Entity/Attribute.php
+@@ -65,11 +65,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
+      */
+     protected $_localeDate;
+
+-    /**
+-     * @var \Magento\Catalog\Model\Product\ReservedAttributeList
+-     */
+-    protected $reservedAttributeList;
+-
+     /**
+      * @var \Magento\Framework\Locale\ResolverInterface
+      */
+@@ -94,7 +89,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
+      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+-     * @param \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList
+      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+      * @param DateTimeFormatterInterface $dateTimeFormatter
+      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+@@ -117,7 +111,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
+         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+-        \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
+         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+         DateTimeFormatterInterface $dateTimeFormatter,
+         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+@@ -143,7 +136,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
+         );
+         $this->_localeDate = $localeDate;
+         $this->_localeResolver = $localeResolver;
+-        $this->reservedAttributeList = $reservedAttributeList;
++//        $this->reservedAttributeList = $reservedAttributeList;
+         $this->dateTimeFormatter = $dateTimeFormatter;
+     }
+
+@@ -231,14 +224,14 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
+     public function beforeSave()
+     {
+         // prevent overriding product data
+-        if (isset($this->_data['attribute_code']) && $this->reservedAttributeList->isReservedAttribute($this)) {
+-            throw new LocalizedException(
+-                __(
+-                    'The attribute code \'%1\' is reserved by system. Please try another attribute code',
+-                    $this->_data['attribute_code']
+-                )
+-            );
+-        }
++//        if (isset($this->_data['attribute_code']) && $this->reservedAttributeList->isReservedAttribute($this)) {
++//            throw new LocalizedException(
++//                __(
++//                    'The attribute code \'%1\' is reserved by system. Please try another attribute code',
++//                    $this->_data['attribute_code']
++//                )
++//            );
++//        }
+
+         /**
+          * Check for maximum attribute_code length
+@@ -516,7 +509,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
+         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+         $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+         $this->_localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+-        $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
++//        $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+         $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
+     }
+ }

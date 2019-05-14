@@ -1,0 +1,117 @@
+diff --git a/Model/Store.php b/Model/Store.php
+index 25897f9..b61ad8d 100644
+--- a/Model/Store.php
++++ b/Model/Store.php
+@@ -260,7 +260,7 @@ class Store extends AbstractExtensibleModel implements
+      *
+      * @var \Magento\MediaStorage\Helper\File\Storage\Database
+      */
+-    protected $_coreFileStorageDatabase = null;
++//    protected $_coreFileStorageDatabase = null;
+
+     /**
+      * Filesystem instance
+@@ -361,7 +361,7 @@ class Store extends AbstractExtensibleModel implements
+         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+         \Magento\Store\Model\ResourceModel\Store $resource,
+-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
++//        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
+         \Magento\Framework\App\Cache\Type\Config $configCacheType,
+         \Magento\Framework\UrlInterface $url,
+         \Magento\Framework\App\RequestInterface $request,
+@@ -382,7 +382,7 @@ class Store extends AbstractExtensibleModel implements
+         array $data = [],
+         \Magento\Framework\Event\ManagerInterface $eventManager = null
+     ) {
+-        $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
++//        $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
+         $this->_config = $config;
+         $this->_url = $url;
+         $this->_configCacheType = $configCacheType;
+@@ -418,7 +418,7 @@ class Store extends AbstractExtensibleModel implements
+     public function __sleep()
+     {
+         $properties = parent::__sleep();
+-        $properties = array_diff($properties, ['_coreFileStorageDatabase', '_config']);
++//        $properties = array_diff($properties, ['_coreFileStorageDatabase', '_config']);
+         return $properties;
+     }
+
+@@ -430,8 +430,8 @@ class Store extends AbstractExtensibleModel implements
+     public function __wakeup()
+     {
+         parent::__wakeup();
+-        $this->_coreFileStorageDatabase = ObjectManager::getInstance()
+-            ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
++//        $this->_coreFileStorageDatabase = ObjectManager::getInstance()
++//            ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+         $this->_config = ObjectManager::getInstance()->get(
+             \Magento\Framework\App\Config\ReinitableConfigInterface::class
+         );
+@@ -736,7 +736,7 @@ class Store extends AbstractExtensibleModel implements
+      */
+     protected function _getMediaScriptUrl(Filesystem $filesystem, $secure)
+     {
+-        if (!$this->getConfig(self::XML_PATH_USE_REWRITES) && $this->_coreFileStorageDatabase->checkDbUsage()) {
++        if (!$this->getConfig(self::XML_PATH_USE_REWRITES)) {
+             $baseUrl = $this->getBaseUrl(UrlInterface::URL_TYPE_WEB, $secure);
+             return $baseUrl . $filesystem->getUri(DirectoryList::PUB) . '/' . self::MEDIA_REWRITE_SCRIPT;
+         }
+         
+diff --git a/Setup/Patch/Schema/InitializeStoresAndWebsites.php b/Setup/Patch/Schema/InitializeStoresAndWebsites.php
+index dc1932b..1817e8a 100644
+--- a/Setup/Patch/Schema/InitializeStoresAndWebsites.php
++++ b/Setup/Patch/Schema/InitializeStoresAndWebsites.php
+@@ -29,21 +29,14 @@ class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionI
+      */
+     private $defaultCategory;
+
+-    /**
+-     * @var \Magento\Catalog\Helper\DefaultCategoryFactory
+-     */
+-    private $defaultCategoryFactory;
+-
+     /**
+      * PatchInitial constructor.
+      * @param SchemaSetupInterface $schemaSetup
+      */
+     public function __construct(
+-        SchemaSetupInterface $schemaSetup,
+-        \Magento\Catalog\Helper\DefaultCategoryFactory $defaultCategoryFactory
++        SchemaSetupInterface $schemaSetup
+     ) {
+         $this->schemaSetup = $schemaSetup;
+-        $this->defaultCategoryFactory = $defaultCategoryFactory;
+     }
+
+     /**
+@@ -103,7 +96,7 @@ class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionI
+                     'group_id' => 1,
+                     'website_id' => 1,
+                     'name' => 'Main Website Store',
+-                    'root_category_id' => $this->getDefaultCategory()->getId(),
++                    'root_category_id' => 1,
+                     'default_store_id' => 1
+                 ]
+             );
+@@ -139,19 +132,6 @@ class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionI
+         }
+     }
+
+-    /**
+-     * Get default category.
+-     *
+-     * @deprecated 101.0.0
+-     * @return DefaultCategory
+-     */
+-    private function getDefaultCategory()
+-    {
+-        if ($this->defaultCategory === null) {
+-            $this->defaultCategory = $this->defaultCategoryFactory->create();
+-        }
+-        return $this->defaultCategory;
+-    }
+
+     /**
+      * {@inheritdoc}

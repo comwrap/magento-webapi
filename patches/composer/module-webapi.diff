@@ -1,0 +1,136 @@
+diff --git a/Model/AbstractSchemaGenerator.php b/Model/AbstractSchemaGenerator.php
+index 3afff1a..e4a2eb2 100644
+--- a/Model/AbstractSchemaGenerator.php
++++ b/Model/AbstractSchemaGenerator.php
+@@ -9,7 +9,6 @@ namespace Magento\Webapi\Model;
+ use Magento\Framework\App\ObjectManager;
+ use Magento\Framework\Serialize\Serializer\Json;
+ use Magento\Framework\Webapi\Authorization;
+-use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
+ use Magento\Webapi\Model\Cache\Type\Webapi;
+
+ /**
+@@ -27,11 +26,6 @@ abstract class AbstractSchemaGenerator
+      */
+     protected $typeProcessor;
+
+-    /**
+-     * @var \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface
+-     */
+-    protected $serviceTypeList;
+-
+     /**
+      * @var ServiceMetadata
+      */
+@@ -54,7 +48,6 @@ abstract class AbstractSchemaGenerator
+      *
+      * @param Webapi $cache
+      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+-     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
+      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+      * @param Authorization $authorization
+      * @param Json|null $serializer
+@@ -62,14 +55,12 @@ abstract class AbstractSchemaGenerator
+     public function __construct(
+         Webapi $cache,
+         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+-        ServiceTypeListInterface $serviceTypeList,
+         ServiceMetadata $serviceMetadata,
+         Authorization $authorization,
+         Json $serializer = null
+     ) {
+         $this->cache = $cache;
+         $this->typeProcessor = $typeProcessor;
+-        $this->serviceTypeList = $serviceTypeList;
+         $this->serviceMetadata = $serviceMetadata;
+         $this->authorization = $authorization;
+         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+diff --git a/Model/Rest/Swagger/Generator.php b/Model/Rest/Swagger/Generator.php
+index 855f455..bedf434 100644
+--- a/Model/Rest/Swagger/Generator.php
++++ b/Model/Rest/Swagger/Generator.php
+@@ -107,7 +107,6 @@ class Generator extends AbstractSchemaGenerator
+      *
+      * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
+      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+-     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
+      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+      * @param Authorization $authorization
+      * @param SwaggerFactory $swaggerFactory
+@@ -116,7 +115,6 @@ class Generator extends AbstractSchemaGenerator
+     public function __construct(
+         \Magento\Webapi\Model\Cache\Type\Webapi $cache,
+         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+-        \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList,
+         \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
+         Authorization $authorization,
+         SwaggerFactory $swaggerFactory,
+@@ -127,7 +125,6 @@ class Generator extends AbstractSchemaGenerator
+         parent::__construct(
+             $cache,
+             $typeProcessor,
+-            $serviceTypeList,
+             $serviceMetadata,
+             $authorization
+         );
+@@ -630,9 +627,7 @@ class Generator extends AbstractSchemaGenerator
+      */
+     protected function addCustomAttributeTypes()
+     {
+-        foreach ($this->serviceTypeList->getDataTypes() as $customAttributeClass) {
+-            $this->typeProcessor->register($customAttributeClass);
+-        }
++
+     }
+
+     /**
+diff --git a/Model/Soap/Wsdl/Generator.php b/Model/Soap/Wsdl/Generator.php
+index e14b4a0..67c4c09 100644
+--- a/Model/Soap/Wsdl/Generator.php
++++ b/Model/Soap/Wsdl/Generator.php
+@@ -35,7 +35,6 @@ class Generator extends AbstractSchemaGenerator
+      *
+      * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
+      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+-     * @param \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList
+      * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+      * @param Authorization $authorization
+      * @param WsdlFactory $wsdlFactory
+@@ -43,7 +42,6 @@ class Generator extends AbstractSchemaGenerator
+     public function __construct(
+         \Magento\Webapi\Model\Cache\Type\Webapi $cache,
+         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
+-        \Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface $serviceTypeList,
+         \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
+         Authorization $authorization,
+         WsdlFactory $wsdlFactory
+@@ -52,7 +50,6 @@ class Generator extends AbstractSchemaGenerator
+         parent::__construct(
+             $cache,
+             $typeProcessor,
+-            $serviceTypeList,
+             $serviceMetadata,
+             $authorization
+         );
+@@ -121,10 +118,6 @@ class Generator extends AbstractSchemaGenerator
+      */
+     protected function addCustomAttributeTypes($wsdl)
+     {
+-        foreach ($this->serviceTypeList->getDataTypes() as $customAttributeClass) {
+-            $typeName = $this->typeProcessor->register($customAttributeClass);
+-            $wsdl->addComplexType($this->typeProcessor->getArrayItemType($typeName));
+-        }
+         return $wsdl;
+     }
+
+diff --git a/etc/di.xml b/etc/di.xml
+index 62ba22a..fe4efae 100644
+--- a/etc/di.xml
++++ b/etc/di.xml
+@@ -58,4 +58,6 @@
+             </argument>
+         </arguments>
+     </type>
++    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Framework\Webapi\CustomAttributeTypeLocator" />
++
+ </config>
