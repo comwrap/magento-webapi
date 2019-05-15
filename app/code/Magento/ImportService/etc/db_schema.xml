@@ -20,6 +20,7 @@
                 comment="Type of the import"/>
         <column xsi:type="varchar" name="import_data" length="255"
                 comment="Import data"/>
+        <column xsi:type="longtext" name="mapping" comment="Fields Mapping" />
         <column xsi:type="longtext" name="format" comment="Source Format" />
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created at"/>

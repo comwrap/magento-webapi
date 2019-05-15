@@ -17,8 +17,11 @@ interface ImportStartInterface
     /**
      * Start import
      *
+     * @param string $uuid
+     * @param string $type
      * @param \Magento\ImportService\Api\Data\ImportConfigInterface $importConfig
      * @return \Magento\ImportService\Api\Data\ImportStartResponseInterface
+     * @throws \Magento\ImportService\ImportServiceException
      */
-    public function execute(ImportConfigInterface $importConfig);
+    public function execute($uuid, $type, ImportConfigInterface $importConfig);
 }

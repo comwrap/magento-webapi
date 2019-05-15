@@ -23,17 +23,4 @@ class Collection extends AbstractCollection
     {
         $this->_init(Source::class, SourceResourceModel::class);
     }
-
-    /**
-     * Perform operations after collection load
-     *
-     * @return $this
-     */
-    protected function _afterLoad()
-    {
-        foreach($this as &$item) {
-            $item->decorate();
-        }
-        return parent::_afterLoad();
-    }
 }

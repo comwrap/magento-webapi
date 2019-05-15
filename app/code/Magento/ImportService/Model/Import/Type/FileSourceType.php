@@ -43,6 +43,10 @@ class FileSourceType implements SourceTypeInterface
      * @var array
      */
     private $allowedMimeTypes;
+    /**
+     * @var null
+     */
+    private $iterator;
 
     /**
      * CSV File Type constructor.
@@ -58,13 +62,15 @@ class FileSourceType implements SourceTypeInterface
         Filesystem $filesystem,
         IdentityGenerator $identityGenerator,
         $sourceType = null,
-        $allowedMimeTypes = []
+        $allowedMimeTypes = [],
+        $iterator = null
     ) {
         $this->sourceRepository = $sourceRepository;
         $this->filesystem = $filesystem;
         $this->identityGenerator = $identityGenerator;
         $this->sourceType = $sourceType;
         $this->allowedMimeTypes = $allowedMimeTypes;
+        $this->iterator = $iterator;
     }
 
     /**
@@ -88,24 +94,20 @@ class FileSourceType implements SourceTypeInterface
     }
 
     /**
-     * save source content
-     *
-     * @param SourceInterface $source
-     * @throws ImportServiceException
-     * @return SourceInterface
+     *  {@inheritdoc}
      */
     public function save(SourceInterface $source)
     {
         /** @var string $uuid */
-        $uuid = $source->getUuid() ?: $this->identityGenerator->generateId();
+        $uuid = $source->getUuid() ? : $this->identityGenerator->generateId();
 
         /** @var string $fileName */
         $fileName = $uuid . $this->getFileExtension();
 
         /** @var string $contentFilePath */
-        $contentFilePath =  SourceTypeInterface::IMPORT_SOURCE_FILE_PATH . $fileName;
+        $contentFilePath = SourceTypeInterface::IMPORT_SOURCE_FILE_PATH . $fileName;
 
-        /** @var Magento\Framework\Filesystem\Directory\Write $var */
+        /** @var \Magento\Framework\Filesystem\Directory\Write $var */
         $var = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
 
         if (!$var->writeFile($contentFilePath, $source->getImportData())) {
@@ -130,5 +132,18 @@ class FileSourceType implements SourceTypeInterface
         $source = $this->sourceRepository->getByUuid($source->getUuid());
 
         return $source;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAbsolutePathToFile(SourceInterface $source)
+    {
+        /** @var string $contentFilePath */
+        $contentFilePath = SourceTypeInterface::IMPORT_SOURCE_FILE_PATH . $source->getImportData();
+
+        /** @var \Magento\Framework\Filesystem\Directory\Write $var */
+        $dirReader = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        return $dirReader->getAbsolutePath($contentFilePath);
     }
 }

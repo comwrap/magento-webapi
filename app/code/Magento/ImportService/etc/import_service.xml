@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<imports xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_ImportService:etc/import_service.xsd">
+
+    <import type="csv_to_magento_catalog_product_rest_api">
+        <behaviours>
+            <behaviour code="add_update">
+                <storages>
+                    <storage class="Magento\ImportService\Model\Storage\MagentoRest" method="post">
+                        <data>
+                            <parameter name="restPath">/rest/V1/products</parameter>
+                        </data>
+                    </storage>
+                </storages>
+            </behaviour>
+            <behaviour code="delete">
+                <storages>
+                    <storage class="MagentoRestApiClient" method="post"/>
+                </storages>
+            </behaviour>
+        </behaviours>
+
+        <mappingProcessor sourceClass="CsvSource" targetClass="JsonBuilder"/>
+
+        <mappingFields>
+            <field name="sku">
+                <sourcePath>sku</sourcePath>
+                <targetPath>product.sku</targetPath>
+            </field>
+            <field name="name">
+                <sourcePath>name</sourcePath>
+                <targetPath>product.name</targetPath>
+            </field>
+        </mappingFields>
+
+    </import>
+
+</imports>

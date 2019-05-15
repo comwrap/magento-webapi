@@ -7,24 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\ImportService\Model;
 
-use Magento\ImportService\Api\Data\SourceInterface;
+use Magento\ImportService\Api\Data\PartialSourceInterface;
 use Magento\ImportService\Model\Import\SourceProcessorPool;
+use Magento\ImportService\Api\PartialSourceUploadInterface;
 
 /**
- * Class SourceUpload
+ * Class PartialSourceUpload
  */
-class SourceUpload
+class PartialSourceUpload implements PartialSourceUploadInterface
 {
-
     /**
      * @var SourceProcessorPool
      */
-    private $sourceProcessorPool;
+    protected $sourceProcessorPool;
 
     /**
      * @var SourceUploadResponse
      */
-    private $responseFactory;
+    protected $responseFactory;
 
     /**
      * @param SourceUploadResponseFactory $responseFactory
@@ -39,15 +39,15 @@ class SourceUpload
     }
 
     /**
-     * @param SourceInterface $source
+     * @param PartialSourceInterface $source
      * @return SourceUploadResponseFactory
      */
-    public function execute(SourceInterface $source)
+    public function execute(PartialSourceInterface $source)
     {
         try {
             $processor = $this->sourceProcessorPool->getProcessor($source);
             $response = $this->responseFactory->create();
-            $response = $processor->processUpload($source, $response);
+            $processor->processUpload($source, $response);
         } catch (\Exception $e) {
             $response = $this->responseFactory->createFailure($e->getMessage());
         }

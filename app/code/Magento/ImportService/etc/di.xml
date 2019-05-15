@@ -7,39 +7,26 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\ImportService\Api\SourceUploadInterface"
-                type="Magento\ImportService\Model\SourceUpload" />
+    <!--preference for="Magento\ImportService\Api\SourceUploadInterface"
+                type="Magento\ImportService\Model\SourceUpload" /-->
     <preference for="Magento\ImportService\Api\Data\SourceInterface"
                 type="Magento\ImportService\Model\Source" />
-    <preference for="Magento\ImportService\Api\Data\SourceFormatInterface"
-                type="Magento\ImportService\Model\SourceFormat" />
+    <!--preference for="Magento\ImportService\Api\Data\SourceFormatInterface"
+                type="Magento\ImportService\Model\Source\AbstractSourceFormat" /-->
     <preference for="Magento\ImportService\Api\Data\SourceFormatMappingInterface"
                 type="Magento\ImportService\Model\SourceFormatMapping" />
-    <preference for="Magento\ImportService\Api\Data\SourceFormatMappingValueInterface"
-                type="Magento\ImportService\Model\SourceFormatMappingValue" />
     <preference for="Magento\ImportService\Api\Data\SourceUploadResponseInterface"
                 type="Magento\ImportService\Model\SourceUploadResponse" />
     <preference for="Magento\ImportService\Api\SourceRepositoryInterface"
                 type="Magento\ImportService\Model\SourceRepository"/>
-    <preference for="Magento\ImportService\Model\Source\Command\GetListInterface" type="Magento\ImportService\Model\Source\Command\GetList"/>
-    <preference for="Magento\ImportService\Model\Source\Command\DeleteByUuidInterface" type="Magento\ImportService\Model\Source\Command\DeleteByUuid"/>
-    <virtualType name="Magento\ImportService\Model\Import\Type\Csv" type="Magento\ImportService\Model\Import\Type\FileSourceType">
-        <arguments>
-            <argument name="sourceType" xsi:type="string">csv</argument>
-            <argument name="allowedMimeTypes" xsi:type="array">
-                <item name="plain" xsi:type="string">text/plain</item>
-                <item name="csv" xsi:type="string">text/csv</item>
-                <item name="octet-stream" xsi:type="string">application/octet-stream</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\ImportService\Model\Import\SourceTypePool">
-        <arguments>
-            <argument name="sourceTypes" xsi:type="array">
-                <item name="csv" xsi:type="object">Magento\ImportService\Model\Import\Type\Csv</item>
-            </argument>
-        </arguments>
-    </type>
+    <preference for="Magento\ImportService\Api\Data\PartialSourceInterface"
+                type="Magento\ImportService\Model\PartialSource" />
+    <preference for="Magento\ImportService\Api\PartialSourceUploadInterface"
+                type="Magento\ImportService\Model\PartialSourceUpload" />
+    <preference for="Magento\ImportService\Api\ImportManagementInterface" type="Magento\ImportService\Model\ImportManagement"/>
+    <preference for="Magento\ImportService\Api\Data\ImportEntryInterface" type="Magento\ImportService\Model\ImportEntry"/>
+    <preference for="Magento\ImportService\Api\Data\FieldMappingInterface" type="Magento\ImportService\Model\Source\FieldMapping"/>
+
     <virtualType name="Magento\ImportService\Model\Source\Validator\LocalPathFileProcessorValidator" type="Magento\ImportService\Model\Source\Validator\ImportServiceValidator">
         <arguments>
             <argument name="validators" xsi:type="array">
@@ -113,4 +100,5 @@
                 type="Magento\ImportService\Model\ImportConfig" />
     <preference for="Magento\ImportService\Api\ImportRestartOperationInterface"
                 type="Magento\ImportService\Model\ImportRestartOperation"/>
+
 </config>

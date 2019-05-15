@@ -7,10 +7,16 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/import/source/:sourceType" method="POST">
-        <service class="Magento\ImportService\Api\SourceUploadInterface" method="execute"/>
+    <route url="/V1/import/source/:uuid/type/:type" method="GET">
+        <service class="Magento\ImportService\Api\SourceRepositoryInterface" method="getByUuid"/>
         <resources>
             <resource ref="Magento_ImportService::import" />
+        </resources>
+    </route>
+    <route url="/V1/import/source/partial" method="POST">
+        <service class="Magento\ImportService\Api\PartialSourceUploadInterface" method="execute"/>
+        <resources>
+            <resource ref="Magento_ImportExport::import" />
         </resources>
     </route>
     <route url="/V1/import/:uuid" method="GET">
@@ -19,7 +25,7 @@
             <resource ref="Magento_ImportService::import" />
         </resources>
     </route>
-    <route url="/V1/import/type/:type/start/:uuid" method="POST">
+    <route url="/V1/import/start/:uuid/type/:type" method="POST">
         <service class="Magento\ImportService\Api\ImportStartInterface" method="execute"/>
         <resources>
             <resource ref="Magento_ImportService::import" />
@@ -27,24 +33,6 @@
     </route>
     <route url="/V1/import/operation-id/:uuid" method="PUT">
         <service class="Magento\ImportService\Api\ImportRestartOperationInterface" method="execute"/>
-        <resources>
-            <resource ref="Magento_ImportService::import" />
-        </resources>
-    </route>
-    <route url="/V1/import/source/:uuid" method="GET">
-        <service class="Magento\ImportService\Api\SourceRepositoryInterface" method="getByUuid"/>
-        <resources>
-            <resource ref="Magento_ImportService::import" />
-        </resources>
-    </route>
-    <route url="/V1/import/sources" method="GET">
-        <service class="Magento\ImportService\Api\SourceRepositoryInterface" method="getList"/>
-		<resources>
-            <resource ref="Magento_ImportService::import" />
-        </resources>
-    </route>
-    <route url="/V1/import/source/:uuid" method="DELETE">
-        <service class="Magento\ImportService\Api\SourceRepositoryInterface" method="deleteByUuid"/>
         <resources>
             <resource ref="Magento_ImportService::import" />
         </resources>

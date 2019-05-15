@@ -9,6 +9,7 @@ namespace Magento\ImportService\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\ImportService\Api\Data\SourceFormatInterface;
+use Magento\ImportService\Api\Data\FieldMappingInterface;
 
 /**
  * Interface SourceInterface
@@ -20,6 +21,7 @@ interface SourceInterface extends ExtensibleDataInterface
     const SOURCE_TYPE = 'source_type';
     const IMPORT_TYPE = 'import_type';
     const IMPORT_DATA = 'import_data';
+    const MAPPING = 'mapping';
     const FORMAT = 'format';
     const CREATED_AT = 'created_at';
     const STATUS = 'status';
@@ -73,9 +75,9 @@ interface SourceInterface extends ExtensibleDataInterface
     public function setImportType(string $importType): SourceInterface;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): ?string;
+    public function getStatus(): string;
 
     /**
      * @param string $status
@@ -86,7 +88,7 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Retrieve Import data
      *
-     * @return string
+     * @return string|null
      */
     public function getImportData(): string;
 
@@ -101,24 +103,24 @@ interface SourceInterface extends ExtensibleDataInterface
     /**
      * Retrieve Source Format
      *
-     * @return \Magento\ImportService\Api\Data\SourceFormatInterface|null
+     * @return \Magento\ImportService\Api\Data\FieldMappingInterface[]|null
      */
-    public function getFormat(): ?SourceFormatInterface;
+    public function getMapping(): ?array;
 
     /**
      * Set Source Format
      *
-     * @param \Magento\ImportService\Api\Data\SourceFormatInterface $format
+     * @param \Magento\ImportService\Api\Data\FieldMappingInterface[] $mapping
      * @return $this
      */
-    public function setFormat(SourceFormatInterface $format): SourceInterface;
+    public function setMapping(array $mapping = null): SourceInterface;
 
     /**
      * Retrieve Import data
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreatedAt(): ?string;
+    public function getCreatedAt(): string;
 
     /**
      * Set Import date

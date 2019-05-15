@@ -26,4 +26,10 @@ interface SourceTypeInterface
      * @return SourceInterface
      */
     public function save(SourceInterface $source);
+
+    /**
+     * @param \Magento\ImportService\Api\Data\SourceInterface $source
+     * @return string
+     */
+    public function getAbsolutePathToFile(SourceInterface $source);
 }

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Structure description for import_service.xml configuration files.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="imports" type="importsType"/>
+
+    <xs:complexType name="importsType">
+        <xs:sequence>
+            <xs:element name="import" type="importType" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="importType">
+        <xs:sequence>
+            <xs:element name="behaviours" type="behavioursType"/>
+            <xs:element name="mappingProcessor" type="mappingProcessorType"/>
+            <xs:element name="mappingFields" type="mappingFieldsType" minOccurs="0"/>
+            <xs:element name="data" type="dataType" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="mappingProcessorType">
+        <xs:attribute name="sourceClass" type="xs:string" use="required"/>
+        <xs:attribute name="targetClass" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="mappingFieldsType" >
+        <xs:sequence>
+            <xs:element name="field" type="mappingFieldType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="mappingFieldType">
+        <xs:sequence>
+            <xs:element name="sourcePath" type="xs:string"/>
+            <xs:element name="targetPath" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="name" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value=".+(, ?.+)*"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="behavioursType" >
+        <xs:sequence>
+            <xs:element name="behaviour" type="behaviourType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="behaviourType">
+        <xs:sequence>
+            <xs:element name="storages" type="storagesType" maxOccurs="unbounded"/>
+        </xs:sequence>
+       <xs:attribute name="code" use="required">
+           <xs:simpleType>
+               <xs:restriction base="xs:string">
+                   <xs:pattern value=".+(, ?.+)*"/>
+               </xs:restriction>
+           </xs:simpleType>
+       </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="storagesType">
+        <xs:sequence>
+            <xs:element name="storage" type="storageType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="storageType">
+        <xs:sequence>
+            <xs:element name="data" type="dataType" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:string" use="required"/>
+        <xs:attribute name="method" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="dataType" >
+        <xs:sequence>
+            <xs:element name="parameter" type="parameterType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="parameterType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="force" type="xs:boolean"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+</xs:schema>

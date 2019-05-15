@@ -12,11 +12,27 @@ namespace Magento\ImportService\Api\Data;
  */
 interface SourceFormatMappingInterface
 {
+
     const SOURCE_ATTRIBUTE = 'source_attribute';
     const DESTINATION_ATTRIBUTE = 'destination_attribute';
     const PROCESSING_RULES = 'processing_rules';
-    const TAXONOMY = 'taxonomy';
-    const VALUES_MAPPING = 'values_mapping';
+
+    const NAME = 'name';
+
+    /**
+     * Retrieve mapping name
+     *
+     * @return string|null
+
+    public function getName();*/
+
+    /**
+     * Set mapping name
+     *
+     * @param string $name
+     * @return $this
+
+    public function setName($name);*/
 
     /**
      * @return string|null
@@ -56,30 +72,4 @@ interface SourceFormatMappingInterface
      * @return $this
      */
     public function setProcessingRules(string $processingRules): SourceFormatMappingInterface;
-
-    /**
-     * @return string|null
-     */
-    public function getTaxonomy(): ?string;
-
-    /**
-     * Set taxonomy
-     *
-     * @param string $taxonomy
-     * @return $this
-     */
-    public function setTaxonomy(string $taxonomy): SourceFormatMappingInterface;
-
-    /**
-     * @return \Magento\ImportService\Api\Data\SourceFormatMappingValueInterface[]|null
-     */
-    public function getValuesMapping(): ?array;
-
-    /**
-     * Set Value Mapping
-     *
-     * @param \Magento\ImportService\Api\Data\SourceFormatMappingValueInterface[] $valuesMapping
-     * @return $this
-     */
-    public function setValuesMapping(array $valuesMapping): SourceFormatMappingInterface;
 }

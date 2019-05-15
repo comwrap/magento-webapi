@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\ImportServiceCsv\Api\SourceUploadCsvInterface"
+                type="Magento\ImportService\Model\SourceUpload" />
+    <preference for="Magento\ImportServiceCsv\Api\Data\SourceCsvInterface" type="Magento\ImportServiceCsv\Model\SourceCsv"/>
+    <preference for="Magento\ImportServiceCsv\Api\Data\SourceFormatCsvInterface"
+                type="Magento\ImportServiceCsv\Model\SourceFormatCsv" />
+    <virtualType name="Magento\ImportServiceCsv\Model\Import\Type\Csv"
+                 type="Magento\ImportService\Model\Import\Type\FileSourceType">
+        <arguments>
+            <argument name="sourceType" xsi:type="string">csv</argument>
+            <argument name="allowedMimeTypes" xsi:type="array">
+                <item name="plain" xsi:type="string">text/plain</item>
+                <item name="csv" xsi:type="string">text/csv</item>
+                <item name="octet-stream" xsi:type="string">application/octet-stream</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ImportService\Model\Import\SourceTypePool">
+        <arguments>
+            <argument name="sourceTypes" xsi:type="array">
+                <item name="csv" xsi:type="object">Magento\ImportServiceCsv\Model\Import\Type\Csv</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportService\Model\Source\ReaderPool">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="csv" xsi:type="object">\Magento\ImportServiceCsv\Model\Reader\CsvFactory</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

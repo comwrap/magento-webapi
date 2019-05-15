@@ -7,19 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\ImportService\Api;
 
-use Magento\ImportService\Api\Data\SourceInterface;
+use Magento\ImportService\Api\Data\PartialSourceInterface;
 
 /**
- * Class ImportProcessor
+ * Class PartialSourceUploadInterface
  */
-interface SourceUploadInterface
+interface PartialSourceUploadInterface
 {
     /**
      * Upload source.
      *
-     * @param string $sourceType
-     * @param \Magento\ImportService\Api\Data\SourceInterface $source
+     * @param \Magento\ImportService\Api\Data\PartialSourceInterface $source
      * @return \Magento\ImportService\Api\Data\SourceUploadResponseInterface
      */
-    public function execute(string $sourceType, SourceInterface $source);
+    public function execute(PartialSourceInterface $source);
 }
